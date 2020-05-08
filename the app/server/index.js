@@ -64,10 +64,19 @@ const users = {};
 io.on('connection', socket => {
   
   if (!users[socket.id]) {
-      users[socket.id] = socket.id;
+    
+    socket.emit('init', socket.id)
+    socket.on('userData', userData =>{
+      users[socket.id] = {uid: userData._id, name: userData.name};
+      io.sockets.emit("allUsers", users);
+    })
+    
+    
   }
-  socket.emit("yourID", socket.id);
-  io.sockets.emit("allUsers", users);
+  
+  
+  // socket.emit("yourID", socket.id);
+  
   socket.on('disconnect', () => {
       delete users[socket.id];
   })

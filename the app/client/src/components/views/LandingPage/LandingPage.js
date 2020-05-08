@@ -7,10 +7,10 @@ function LandingPage(props) {
 
     return (
         <div>
-            {user.userData ? 
+            {(user.userData && user.userData.isAuth) ? 
             <VideoStream userData= {user.userData}/> 
             :
-            <div>
+            <div style={{textAlign:'center'}}>
                 <span style={{ fontSize: '2rem' }}>Please Log In</span>
             </div>
 

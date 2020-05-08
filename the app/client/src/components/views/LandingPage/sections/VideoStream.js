@@ -38,17 +38,21 @@ function VideoStream(props) {
 
     useEffect(() => {
         socket.current = io.connect("http://localhost:5000");
-        console.log(socket)
+        socket.current.emit('userData', props.userData)
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
           setStream(stream);
           if (userVideo.current) {
             userVideo.current.srcObject = stream;
           }
         })
-    
-        socket.current.on("yourID", (id) => {
-          setYourID(id);
+
+        socket.current.on('init',  (id)=>{
+            setYourID(id)
         })
+
+        // socket.current.on("yourID", (id) => {
+        //     setYourID(id);
+        // })
         
         socket.current.on("allUsers", (users) => {
           setUsers(users);
@@ -118,15 +122,27 @@ function VideoStream(props) {
     }
 
     let incomingCall;
-    if (receivingCall) {
+    if (receivingCall) { 
     incomingCall = (
         <div>
-        <h1>{caller} is calling you</h1>
-        <button onClick={acceptCall}>Accept</button>
+            {
+                callAccepted ? <br/> :
+                <div>
+                <h1>{caller && users[caller].name} is calling you</h1>
+                <button onClick={acceptCall}>Accept</button>
+                </div>
+            }
+        
         </div>
     )
     }
-
+    const endCall = ()=>{
+        setCallAccepted(false)
+        setCaller("")
+        setReceivingCall(false)
+        setCallerSignal()
+    }
+    
     return (
         <div>
             <div style ={{ textAlign: 'center'}}>
@@ -143,12 +159,13 @@ function VideoStream(props) {
                             if (key === yourID) {
                                 return null;
                             }
-                            return (
-                            <button onClick={() => callPeer(key)}>Call {key}</button>
+                            else if (!callAccepted) return (
+                            <button onClick={() => callPeer(key)}>Call {users[key].name}</button>
                             );
                         })}
                     </Row>
                     <Row>
+                        <button onClick={endCall}>End Call</button>
                         {incomingCall}
                     </Row>
                 </Container>
