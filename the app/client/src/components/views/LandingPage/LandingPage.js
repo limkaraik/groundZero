@@ -1,14 +1,22 @@
 import React from 'react'
-import { FaCode } from "react-icons/fa";
+import VideoStream from './sections/VideoStream'
+import { useSelector } from "react-redux";
 
-function LandingPage() {
+function LandingPage(props) {
+    const user = useSelector(state => state.user)
+
     return (
-        <>
-        <div className="app">
-            <FaCode style={{ fontSize: '4rem' }} /><br />
-            <span style={{ fontSize: '2rem' }}>Elsa is my favourite princess</span>
+        <div>
+            {user.userData ? 
+            <VideoStream userData= {user.userData}/> 
+            :
+            <div>
+                <span style={{ fontSize: '2rem' }}>Please Log In</span>
+            </div>
+
+            }
         </div>
-        </>
+        
     )
 }
 
