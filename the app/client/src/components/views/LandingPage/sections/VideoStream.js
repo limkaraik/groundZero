@@ -2,23 +2,17 @@ import React, { useEffect, useState, useRef } from 'react';
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
+import {Button, Col, Row} from 'antd'
+import Chat from './Chat'
 
-const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
 
-const Row = styled.div`
-  display: flex;
-  width: 100%;
-`;
+
+
 
 const Video = styled.video`
-  border: 1px solid blue;
-  width: 50%;
-  height: 50%;
+  border: 8px solid white;
+  width: 100%;
+  height: 100%;
 `;
 
 
@@ -119,6 +113,7 @@ function VideoStream(props) {
     PartnerVideo = (
         <Video playsInline ref={partnerVideo} autoPlay />
     );
+    
     }
 
     let incomingCall;
@@ -127,9 +122,13 @@ function VideoStream(props) {
         <div>
             {
                 callAccepted ? <br/> :
-                <div>
+                <div style={{textAlign: 'center'}}>  
                 <h1>{caller && users[caller].name} is calling you</h1>
-                <button onClick={acceptCall}>Accept</button>
+                <Button 
+                block
+                type='primary'
+                size='large'
+                onClick={acceptCall}>Accept</Button>
                 </div>
             }
         
@@ -142,33 +141,56 @@ function VideoStream(props) {
         setReceivingCall(false)
         setCallerSignal()
     }
+
+    const renderFriends = ()=>(
+        <div style={{justifyContent:'center'}}>
+            <h3 style={{textAlign:'center'}}><span>Friends List</span></h3>
+            {Object.keys(users).map(key => {
+                if (key === yourID) {
+                    return null;
+                }
+                else if (!callAccepted) return (
+                <div style={{justifyContent:'center', display:'flex'}}>
+                    <Button size='large' onClick={() => callPeer(key)}>Call {users[key].name}</Button>
+                </div>
+                );
+            })}
+        </div>
+    )
+
     
     return (
         <div>
             <div style ={{ textAlign: 'center'}}>
-                <h2>Hi {props.userData.name}</h2>
+                <h2>Welcome {props.userData.name}</h2>
             </div>
+
             <div style={{width:'100%', paddingTop:'25px'}}>
-                <Container>
-                    <Row>
-                        {UserVideo}
-                        {PartnerVideo}
+                <div>
+                    <Row>  
+                        <Col span={8}>{UserVideo}</Col>
+                        <Col span={8}>{PartnerVideo}</Col>
+                        <Col span={8}>
+                            {/* {
+                                callAccepted ? <Chat name={users[yourID] && users[yourID].name}/>
+                                :
+                                renderFriends()
+                            } */}
+                            <Chat name={users[yourID] && users[yourID].name}/>
+                        </Col>
                     </Row>
-                    <Row>
-                        {Object.keys(users).map(key => {
-                            if (key === yourID) {
-                                return null;
-                            }
-                            else if (!callAccepted) return (
-                            <button onClick={() => callPeer(key)}>Call {users[key].name}</button>
-                            );
-                        })}
-                    </Row>
-                    <Row>
-                        <button onClick={endCall}>End Call</button>
-                        {incomingCall}
-                    </Row>
-                </Container>
+                    <div style = {{maxWidth: '700px', margin:'2rem auto'}}>
+                        { callAccepted &&
+                            <Button 
+                            block
+                            type='danger'
+                            size='large'
+                            shape='round'
+                            onClick={endCall} >End Call</Button>
+                        }
+                        { (receivingCall && !callAccepted)&& incomingCall}
+                    </div>
+                </div>
             </div>
         </div>
     )

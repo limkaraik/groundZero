@@ -16,6 +16,7 @@
     "react-redux": "^7.1.0-rc.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.4.1",
+    "react-scroll-to-bottom": "^2.0.0",
     "recordrtc": "^5.5.9",
     "redux": "^4.0.0",
     "redux-promise": "^0.6.0",
