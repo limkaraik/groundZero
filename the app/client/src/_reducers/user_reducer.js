@@ -3,6 +3,7 @@ import {
     REGISTER_USER,
     AUTH_USER,
     LOGOUT_USER,
+    ADD_MEETING
 } from '../_actions/types';
  
 
@@ -16,6 +17,14 @@ export default function(state={},action){
             return {...state, userData: action.payload }
         case LOGOUT_USER:
             return {...state }
+        case ADD_MEETING:
+            return {
+                ...state,
+                meeting: action.payload,
+                userData:{
+                    ...state.userData
+                }
+            }
         default:
             return state;
     }

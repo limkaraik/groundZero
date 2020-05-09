@@ -4,6 +4,7 @@ import {
     REGISTER_USER,
     AUTH_USER,
     LOGOUT_USER,
+    ADD_MEETING
 } from './types';
 import { USER_SERVER } from '../components/Config.js';
 
@@ -47,3 +48,10 @@ export function logoutUser(){
     }
 }
 
+export function addMeeting(data){
+    
+    return {
+        type: ADD_MEETING,
+        payload: data
+    }
+}

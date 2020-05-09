@@ -4,7 +4,8 @@ import Peer from "simple-peer";
 import styled from "styled-components";
 import {Button, Col, Row} from 'antd'
 import Chat from './Chat'
-
+import {addMeeting} from '../../../../_actions/user_actions'
+import {useDispatch} from 'react-redux'
 
 
 
@@ -17,6 +18,7 @@ const Video = styled.video`
 
 
 function VideoStream(props) {
+    const dispatch = useDispatch();
 
     const [yourID, setYourID] = useState("");
     const [users, setUsers] = useState({});
@@ -136,10 +138,12 @@ function VideoStream(props) {
     )
     }
     const endCall = ()=>{
+        
         setCallAccepted(false)
         setCaller("")
         setReceivingCall(false)
         setCallerSignal()
+        dispatch(addMeeting(1))
     }
 
     const renderFriends = ()=>(
