@@ -171,12 +171,12 @@ function VideoStream(props) {
                         <Col span={8}>{UserVideo}</Col>
                         <Col span={8}>{PartnerVideo}</Col>
                         <Col span={8}>
-                            {/* {
+                            {
                                 callAccepted ? <Chat name={users[yourID] && users[yourID].name}/>
                                 :
                                 renderFriends()
-                            } */}
-                            <Chat name={users[yourID] && users[yourID].name}/>
+                            }
+                            
                         </Col>
                     </Row>
                     <div style = {{maxWidth: '700px', margin:'2rem auto'}}>
